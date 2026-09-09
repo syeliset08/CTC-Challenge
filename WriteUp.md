@@ -10,76 +10,41 @@
 
 ## 1. What did you build for Part B, and why that?
 
-> What made you pick it over everything else you could have built? This is the
-> question we care most about - the _why_ matters more than the _what_.
+> I didn't have time to build something new for part B, I spend a lot of time trying to understand the full file structure, debugging the setup including docker issues and issues with tailwind.css.
 
 ## 2. What did you decide, and what did you rule out?
 
-> Route shapes, data model, where the logic lives, what you deliberately didn't
-> do. Name a tradeoff you're not sure you got right.
+> My process was just breaking down the program as much as I could and this was the notes I took on a google document:
+> App:
+App loose:
+Globals.css: includes global style that each page will use including a lgit coolor scheme and background and text color specifications
+Layout.tsx: layout file
+page.tsx: the homepage that acts as the server and calls getRestraunts() from lib/apiClient where export makes page’s function Homepage that gets and formats restaurant available to be used in other files
+Api:
+health/route.ts: just checks if server is running
+restaurant/route.ts: defines get function which sends sql query to postgersql which is an instruction sent to the database to retrieve or change data and it specifically retrieves every column and puts newest restaurants first and .map formats and post is a method I must implement
+Task: make post actually create a new restaurant, read restaurant fields, validate returning 400 if invalid otherwise insert into postgresql, convert database row and return status 201
+id/route.ts: handles a single item, get end point uses query request to get restaurant with specific id but put and delete are not implemented
+Task: read json body, validate restaurant data, update the restaurant whose id is params.id, return updated restaurant, return 404 if that ID does not exist and also fix delete by deleting from restaurants at the id and return 204 if it doesn’t exist
+Db:
+migrations/001_create_tables.sql: creates the the main tables necessary for feeding brennan
+migrate.ts: locates migration directory, finds all sql files and gets all filenames in the migrations dir and sorts them alphabetically, loops through them alphabetically and executes it, then it sends entire sql file to postgresql and waits it to execute
+pool.ts: creates a shared pg.pool which is a set of database connections from the database url and reuses it and this file just uses url or process.env to create a global pool to amke connection between next.js and postgresql efficient
+seeds.ts: resets data with a standard test data that is consistent
+Lib: shared code used by both frontend and api
+types.ts: interfaces, converts postgers row into contract shape
+
 
 ## 3. Where did you cut corners?
 
-> What would you fix first with another day?
+> I still need to fix the created at timestamp, because when it prints it is always undefined.
 
 ---
 
-## Part B: routes
-
-> Every endpoint you added, with its request and response shapes, so we can
-> exercise it without reverse-engineering your code. Add or remove rows as
-> needed; delete this section if your Part B added no routes.
-
-| Method and path | What it does | Success | Errors       |
-| --------------- | ------------ | ------- | ------------ |
-| `GET /api/...`  |              | `200` + | `404` if ... |
-| `POST /api/...` |              | `201` + | `400` on ... |
-
-**`POST /api/...`**
-
-```jsonc
-// request
-{ }
-
-// 201 response
-{ }
-```
-
-## Schema changes
-
-> Any migrations you added (`002_*.sql`, ...), new tables or columns, and
-> anything a reviewer needs to run beyond `./setup.sh`. Write "none" if there
-> were none.
-
-## How I verified this
-
-> How you checked your work - the happy paths _and_ the failures. `curl`
-> commands, a Postman collection, a scratch script, screenshots: whatever you
-> actually used. Paste the commands.
->
-> This is much faster for us to review than working it out ourselves, and it's
-> how you show you checked the edge cases.
-
-**Part A** - the contract table in CHALLENGE.md, every row including the error
-cases:
-
-```bash
-# e.g.
-curl -i http://localhost:3000/api/restaurants          # 200 + array
-curl -i http://localhost:3000/api/restaurants/99999    # 404
-curl -i http://localhost:3000/api/restaurants/abc      # 404
-curl -i -X POST http://localhost:3000/api/restaurants \
-  -H 'Content-Type: application/json' \
-  -d '{"name":"Out Of Range","rating":6}'              # 400
-```
-
-**Part B** - the equivalent cases for what you built:
-
-```bash
-
+## Part B: routes- I did not get to part B
 ```
 
 ## Known issues / what I'd do next
 
-> Anything broken, unfinished, or that you know is wrong. Being upfront here
-> costs you nothing and tells us a lot.
+> I was honestly very caught off guard with this project, i haven’t worked with type script and while robotics and my internship with Dr. Chen involved connecting an API to frontend, but I didn’t need to work with that in robotics and it has been a while since my internship. So first I just had to understand what was happening. 
+I didn't understand, but I just researched and use AI to help me understand all components of the project. Then I worked on the set up and had to debug an issue regarding failed import of tailwind.css which I somehow fixed during office hours. I would like to further understand the specifics, fix the issue with the undefined created at timestamps and implement my own feature for part B hopefully with less AI assistance. I tried my best to get as much done before the deadline.
